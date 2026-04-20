@@ -3,15 +3,10 @@ import tarfile
 import subprocess
 import os
 
-fileName = "discord_update_file"
-currentDir = os.path.dirname(os.path.abspath(__file__))
-print(f"Using {currentDir}")
-os.chdir(currentDir)
+def download_discord(fileName: str) -> None:
+    print("Downloading file...")
+    downloadFile = requests.get("https://discord.com/api/download/canary?platform=linux&format=tar.gz")
 
-print("Downloading file...")
-downloadFile = requests.get("https://discord.com/api/download/canary?platform=linux&format=tar.gz")
-
-try:
     with open(f"{fileName}.tar.gz", "wb") as file:
         file.write(downloadFile.content)
 
@@ -19,14 +14,24 @@ try:
         with tarfile.open(f"{fileName}.tar.gz", "r:gz") as tar:
             tar.extractall(filter="tar")
 
-    os.remove(f"{fileName}.tar.gz")
-    print("File unzipped.  Launching Discord...")
+        os.remove(f"{fileName}.tar.gz")
+        print("File unzipped.")
 
-
+def run_discord() -> None:
+    print("Running Discord...")
     subprocess.run(["./DiscordCanary/discord-canary"],shell=True)
     print("Done.")
 
 
-except Exception as e:
-    print(f"An Error occurred while downloading/unzipping: {e}")
 
+if __name__ == "__main__":
+
+    try:
+        currentDir = os.path.dirname(os.path.abspath(__file__))
+        print(f"Using {currentDir}")
+        os.chdir(currentDir)
+
+        download_discord("discord_update_file")
+        run_discord()
+    except Exception as e:
+        print(f"An Error occurred while downloading/unzipping: {e}")
