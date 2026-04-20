@@ -23,7 +23,7 @@ try:
     print("File unzipped.  Launching Discord...")
 
 
-    subprocess.run(["./DiscordCanary/DiscordCanary"],shell=True)
+    subprocess.run(["./DiscordCanary/discord-canary"],shell=True)
     print("Done.")
 
 
